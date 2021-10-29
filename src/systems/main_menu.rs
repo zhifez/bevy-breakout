@@ -37,7 +37,7 @@ impl MainMenuSystem {
                                 value: "Breakout".to_string(),
                                 style: TextStyle {
                                     font: asset_server.load("fonts/square.ttf"),
-                                    font_size: 50.0,
+                                    font_size: 100.0,
                                     color: Color::hex("F5F5F5").unwrap(),
                                 },
                             },
