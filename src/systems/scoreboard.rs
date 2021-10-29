@@ -23,15 +23,7 @@ impl ScoreboardSystem {
                             style: TextStyle {
                                 font: asset_server.load("fonts/square.ttf"),
                                 font_size: 40.0,
-                                color: Color::hex("3A0CA3").unwrap(),
-                            },
-                        },
-                        TextSection {
-                            value: "".to_string(),
-                            style: TextStyle {
-                                font: asset_server.load("fonts/square.ttf"),
-                                font_size: 40.0,
-                                color: Color::hex("3A0CA3").unwrap(),
+                                color: Color::hex("3C3C3C").unwrap(),
                             },
                         },
                     ],

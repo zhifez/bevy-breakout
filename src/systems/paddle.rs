@@ -21,7 +21,7 @@ impl PaddleSystem {
         commands
         .spawn_bundle(
             SpriteBundle {
-                material: materials.add(Color::hex("087E8B").unwrap().into()),
+                material: materials.add(Color::hex("3C3C3C").unwrap().into()),
                 transform: Transform::from_xyz(0.0, -WINDOW_HEIGHT / 2.0 + PADDLE_HEIGHT / 2.0 + WALL_SIZE, 0.0),
                 sprite: Sprite::new(Vec2::new(PADDLE_WIDTH, PADDLE_HEIGHT)),
                 ..Default::default()

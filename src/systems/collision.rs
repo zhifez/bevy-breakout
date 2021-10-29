@@ -19,7 +19,7 @@ impl CollisionSystem {
         mut materials: ResMut<Assets<ColorMaterial>>,
     ) {
         // ADD WALLS
-        let wall_material = materials.add(Color::hex("3C3C3C").unwrap().into());
+        let wall_material = materials.add(Color::hex("087E8B").unwrap().into());
 
         // LEFT
         commands
@@ -76,7 +76,7 @@ impl CollisionSystem {
             WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE * 2.0, 
             0.0
         );
-        let brick_material = materials.add(Color::hex("C1839F").unwrap().into());
+        let brick_material = materials.add(Color::hex("087E8B").unwrap().into());
 
         for row in 0..BRICK_ROWS {
             let y_position = row as f32 * (BRICK_HEIGHT + BRICK_SPACING);
