@@ -1,5 +1,10 @@
 use bevy::prelude::*;
 
+#[derive(Debug)]
+pub enum UiType {
+    SpaceBar,
+}
+
 pub struct MainMenuSystem;
 
 impl MainMenuSystem {
@@ -96,7 +101,29 @@ impl MainMenuSystem {
                     },
                     ..Default::default()
                 }
-            );
-        });
+            )
+            .insert(UiType::SpaceBar);
+        })
+        .insert(Timer::from_seconds(1.0, true));
+    }
+
+    pub fn run(
+        time: Res<Time>,
+        mut ui_query: Query<(&UiType, &mut Visible)>,
+        mut timer_query: Query<&mut Timer>,
+    ) {
+        let mut timer = timer_query.single_mut().unwrap();
+        timer.tick(time.delta());
+
+        if timer.just_finished() {
+            for (ui_type, mut visible) in ui_query.iter_mut() {
+                match ui_type {
+                    UiType::SpaceBar => {
+                        visible.is_visible = !visible.is_visible;
+                    },
+                    // _ => {},
+                }
+            }
+        }
     }
 }

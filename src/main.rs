@@ -50,6 +50,7 @@ fn main() {
     )
     .add_system_set(
         SystemSet::on_update(GameState::MainMenu)
+        .with_system(MainMenuSystem::run.system())
     )
     .add_system_set(
         SystemSet::on_exit(GameState::MainMenu)
