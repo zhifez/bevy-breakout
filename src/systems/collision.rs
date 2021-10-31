@@ -5,6 +5,7 @@ use crate::{Collider, GameLevel, GameLevelAsset, GameState, WINDOW_HEIGHT, WINDO
 use super::*;
 
 pub const WALL_SIZE: f32 = 10.0;
+pub const WALL_SIZE_TOP: f32 = 50.0;
 pub const BRICK_SPACING: f32 = 20.0;
 pub const BRICK_WIDTH: f32 = 80.0;
 pub const BRICK_HEIGHT: f32 = 30.0;
@@ -51,24 +52,24 @@ impl CollisionSystem {
         .spawn_bundle(
             SpriteBundle {
                 material: wall_material.clone(),
-                transform: Transform::from_xyz(0.0, WINDOW_HEIGHT / 2.0 - WALL_SIZE / 2.0, 0.0),
-                sprite: Sprite::new(Vec2::new(WINDOW_WIDTH, WALL_SIZE)),
+                transform: Transform::from_xyz(0.0, WINDOW_HEIGHT / 2.0 - WALL_SIZE_TOP / 2.0, 0.0),
+                sprite: Sprite::new(Vec2::new(WINDOW_WIDTH, WALL_SIZE_TOP)),
                 ..Default::default()
             }
         )
         .insert(Collider::Solid);
 
         // BOTTOM
-        commands
-        .spawn_bundle(
-            SpriteBundle {
-                material: wall_material.clone(),
-                transform: Transform::from_xyz(0.0, -WINDOW_HEIGHT / 2.0 + WALL_SIZE / 2.0, 0.0),
-                sprite: Sprite::new(Vec2::new(WINDOW_WIDTH, WALL_SIZE)),
-                ..Default::default()
-            }
-        )
-        .insert(Collider::Solid);
+        // commands
+        // .spawn_bundle(
+        //     SpriteBundle {
+        //         material: wall_material.clone(),
+        //         transform: Transform::from_xyz(0.0, -WINDOW_HEIGHT / 2.0 + WALL_SIZE / 2.0, 0.0),
+        //         sprite: Sprite::new(Vec2::new(WINDOW_WIDTH, WALL_SIZE)),
+        //         ..Default::default()
+        //     }
+        // )
+        // .insert(Collider::Solid);
 
         // ADD BRICKS
         for (index, gl_data) in game_levels.iter().enumerate() {
@@ -81,7 +82,7 @@ impl CollisionSystem {
                     let bricks_width = columns as f32 * (BRICK_WIDTH + BRICK_SPACING) - BRICK_SPACING;
                     let bricks_offset = Vec3::new(
                         -(bricks_width / 2.0 - BRICK_WIDTH / 2.0), 
-                        WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE * 2.0, 
+                        WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE_TOP - WALL_SIZE, 
                         0.0
                     );
                     let brick_material = materials.add(Color::hex("087E8B").unwrap().into());
@@ -114,35 +115,6 @@ impl CollisionSystem {
                 break;
             }
         }
-        
-        // let bricks_width = BRICK_COLUMNS as f32 * (BRICK_WIDTH + BRICK_SPACING) - BRICK_SPACING;
-        // let bricks_offset = Vec3::new(
-        //     -(bricks_width / 2.0 - BRICK_WIDTH / 2.0), 
-        //     WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE * 2.0, 
-        //     0.0
-        // );
-        // let brick_material = materials.add(Color::hex("087E8B").unwrap().into());
-
-        // for row in 0..BRICK_ROWS {
-        //     let y_position = row as f32 * (BRICK_HEIGHT + BRICK_SPACING);
-        //     for column in 0..BRICK_COLUMNS {
-        //         let brick_position = Vec3::new(
-        //             column as f32 * (BRICK_WIDTH + BRICK_SPACING),
-        //             -y_position,
-        //             0.0,
-        //         ) + bricks_offset;
-        //         commands
-        //         .spawn_bundle(
-        //             SpriteBundle {
-        //                 material: brick_material.clone(),
-        //                 sprite: Sprite::new(Vec2::new(BRICK_WIDTH, BRICK_HEIGHT)),
-        //                 transform: Transform::from_translation(brick_position),
-        //                 ..Default::default()
-        //             }
-        //         )
-        //         .insert(Collider::Scorable);
-        //     }
-        // }
     }
 
     pub fn run(

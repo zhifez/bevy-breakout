@@ -4,8 +4,8 @@ use crate::{Collider, WINDOW_HEIGHT, WINDOW_WIDTH};
 
 use super::collision::WALL_SIZE;
 
-pub const PADDLE_WIDTH: f32 = 120.0;
-pub const PADDLE_HEIGHT: f32 = 30.0;
+pub const PADDLE_WIDTH: f32 = 150.0;
+pub const PADDLE_HEIGHT: f32 = 20.0;
 
 pub struct Paddle {
     pub speed: f32,

@@ -1,5 +1,9 @@
 use bevy::{math::Vec3, prelude::*};
 
+use crate::WINDOW_HEIGHT;
+
+use super::Scoreboard;
+
 pub const BALL_SIZE: f32 = 30.0;
 pub const BALL_VELOCITY: f32 = 400.0;
 
@@ -30,12 +34,25 @@ impl BallSystem {
 
     pub fn run(
         time: Res<Time>,
-        mut ball_query: Query<(&Ball, &mut Transform)>
+        mut ball_query: Query<(&mut Ball, &mut Transform)>,
+        mut scoreboard: ResMut<Scoreboard>,
     ) {
         let delta_seconds = f32::min(0.2, time.delta_seconds());
 
-        if let Ok((ball, mut transform)) = ball_query.single_mut() {
+        if let Ok((mut ball, mut transform)) = ball_query.single_mut() {
             transform.translation += ball.velocity * delta_seconds;
+
+            if scoreboard.lives > 0 {
+                if transform.translation.y.abs() >= WINDOW_HEIGHT / 2.0 {
+                    scoreboard.lives -= 1;
+                    transform.translation = Vec3::new(0.0, -50.0, 1.0);
+                    let mut x_velocity = 0.5;
+                    if scoreboard.lives % 2 == 0 {
+                        x_velocity = -0.5;
+                    }
+                    ball.velocity = BALL_VELOCITY * Vec3::new(x_velocity, -0.5, 0.0).normalize();
+                }
+            }
         }
     }
 }

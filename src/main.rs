@@ -65,7 +65,12 @@ fn main() {
     })
     .insert_resource(ClearColor(Color::hex("F5F5F5").unwrap()))
     .insert_resource(GameState { selected_level: 0 })
-    .insert_resource(Scoreboard { score: 0 })
+    .insert_resource(
+        Scoreboard { 
+            score: 0,
+            lives: 3,
+        }
+    )
     .add_plugins(DefaultPlugins)
     .add_plugin(RonAssetPlugin::<GameLevelAsset>::new(&["level"]))
     .add_state(AppState::MainMenu)

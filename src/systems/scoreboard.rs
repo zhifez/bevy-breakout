@@ -4,7 +4,9 @@ use crate::systems::collision::WALL_SIZE;
 
 pub struct Scoreboard {
     pub score: usize,
+    pub lives: usize,
 }
+pub struct ScoreboardLabel(String);
 
 pub struct ScoreboardSystem;
 
@@ -23,7 +25,7 @@ impl ScoreboardSystem {
                             style: TextStyle {
                                 font: asset_server.load("fonts/square.ttf"),
                                 font_size: 40.0,
-                                color: Color::hex("3C3C3C").unwrap(),
+                                color: Color::hex("F5F5F5").unwrap(),
                             },
                         },
                     ],
@@ -32,22 +34,59 @@ impl ScoreboardSystem {
                 style: Style {
                     position_type: PositionType::Absolute,
                     position: Rect {
-                        top: Val::Px(WALL_SIZE * 2.0),
-                        left: Val::Px(WALL_SIZE * 2.0),
+                        top: Val::Px(WALL_SIZE / 2.0),
+                        left: Val::Px(WALL_SIZE),
                         ..Default::default()
                     },
                     ..Default::default()
                 },
                 ..Default::default()
             }
-        );
+        )
+        .insert(ScoreboardLabel("score_label".to_string()));
+
+        commands
+        .spawn_bundle(
+            TextBundle {
+                text: Text {
+                    sections: vec![
+                        TextSection {
+                            value: "Lives:".to_string(),
+                            style: TextStyle {
+                                font: asset_server.load("fonts/square.ttf"),
+                                font_size: 40.0,
+                                color: Color::hex("F5F5F5").unwrap(),
+                            },
+                        },
+                    ],
+                    ..Default::default()
+                },
+                style: Style {
+                    position_type: PositionType::Absolute,
+                    position: Rect {
+                        top: Val::Px(WALL_SIZE / 2.0),
+                        right: Val::Px(WALL_SIZE),
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                },
+                ..Default::default()
+            }
+        )
+        .insert(ScoreboardLabel("lives_label".to_string()));
     }
 
     pub fn run(
         scoreboard: Res<Scoreboard>, 
-        mut query: Query<&mut Text>,
+        mut query: Query<(&mut Text, &ScoreboardLabel)>,
     ) {
-        let mut text = query.single_mut().unwrap();
-        text.sections[0].value = format!("Score: {}", scoreboard.score);
+        for (mut text, label_name) in query.iter_mut() {
+            if label_name.0 == "score_label" {
+                text.sections[0].value = format!("Score: {}", scoreboard.score);
+            }
+            else if label_name.0 == "lives_label" {
+                text.sections[0].value = format!("Lives: {}", scoreboard.lives);
+            }
+        }
     }
 }
