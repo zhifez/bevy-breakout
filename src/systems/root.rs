@@ -1,6 +1,6 @@
 use bevy::{app::AppExit, prelude::*};
 
-use crate::GameState;
+use crate::AppState;
 
 pub struct RootSystem;
 
@@ -8,7 +8,7 @@ impl RootSystem {
     pub fn run(
         keyboard_input: Res<Input<KeyCode>>,
         mut app_exit_events: EventWriter<AppExit>,
-        mut game_state: ResMut<State<GameState>>,
+        mut game_state: ResMut<State<AppState>>,
     ) {
         if keyboard_input.pressed(KeyCode::Escape) {
             app_exit_events.send(AppExit);
@@ -16,9 +16,9 @@ impl RootSystem {
         }
 
         match game_state.current() {
-            GameState::MainMenu => {
+            AppState::MainMenu => {
                 if keyboard_input.pressed(KeyCode::Space) {
-                    game_state.set(GameState::Playing).unwrap();
+                    game_state.set(AppState::Playing).unwrap();
                 }
             },
             _ => {}

@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::GameState;
+
 #[derive(Debug)]
 pub enum UiType {
     SpaceBar,
@@ -111,6 +113,7 @@ impl MainMenuSystem {
         time: Res<Time>,
         mut ui_query: Query<(&UiType, &mut Visible)>,
         mut timer_query: Query<&mut Timer>,
+        mut game_state: ResMut<GameState>,
     ) {
         let mut timer = timer_query.single_mut().unwrap();
         timer.tick(time.delta());
@@ -119,6 +122,7 @@ impl MainMenuSystem {
             for (ui_type, mut visible) in ui_query.iter_mut() {
                 match ui_type {
                     UiType::SpaceBar => {
+                        game_state.selected_level = 0;
                         visible.is_visible = !visible.is_visible;
                     },
                     // _ => {},
