@@ -36,13 +36,14 @@ impl BallSystem {
         time: Res<Time>,
         mut ball_query: Query<(&mut Ball, &mut Transform)>,
         mut scoreboard: ResMut<Scoreboard>,
+        keyboard_input: Res<Input<KeyCode>>,
     ) {
         let delta_seconds = f32::min(0.2, time.delta_seconds());
 
         if let Ok((mut ball, mut transform)) = ball_query.single_mut() {
-            transform.translation += ball.velocity * delta_seconds;
-
             if scoreboard.lives > 0 {
+                transform.translation += ball.velocity * delta_seconds;
+
                 if transform.translation.y.abs() >= WINDOW_HEIGHT / 2.0 {
                     scoreboard.lives -= 1;
                     transform.translation = Vec3::new(0.0, -50.0, 1.0);
@@ -52,6 +53,15 @@ impl BallSystem {
                     }
                     ball.velocity = BALL_VELOCITY * Vec3::new(x_velocity, -0.5, 0.0).normalize();
                 }
+            }
+
+            if keyboard_input.just_pressed(KeyCode::R) {
+                transform.translation = Vec3::new(0.0, -50.0, 1.0);
+                let mut x_velocity = 0.5;
+                if scoreboard.lives % 2 == 0 {
+                    x_velocity = -0.5;
+                }
+                ball.velocity = BALL_VELOCITY * Vec3::new(x_velocity, -0.5, 0.0).normalize();
             }
         }
     }

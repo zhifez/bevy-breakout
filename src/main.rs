@@ -2,7 +2,7 @@ mod systems;
 
 use bevy::{DefaultPlugins, prelude::*, render::camera::Camera};
 
-use systems::{BallSystem, CollisionSystem, LevelSelectSystem, MainMenuSystem, PaddleSystem, RootSystem, Scoreboard, ScoreboardSystem};
+use systems::{BallSystem, CollisionSystem, GameOverSystem, LevelSelectSystem, MainMenuSystem, PaddleSystem, RootSystem, Scoreboard, ScoreboardSystem};
 
 use bevy_reflect::TypeUuid;
 
@@ -109,6 +109,7 @@ fn main() {
         .with_system(BallSystem::setup.system())
         .with_system(ScoreboardSystem::setup.system())
         .with_system(CollisionSystem::setup.system())
+        .with_system(GameOverSystem::setup.system())
     )
     .add_system_set(
         SystemSet::on_update(AppState::Playing)
@@ -116,6 +117,7 @@ fn main() {
         .with_system(BallSystem::run.system())
         .with_system(ScoreboardSystem::run.system())
         .with_system(CollisionSystem::run.system())
+        .with_system(GameOverSystem::run.system())
     )
     .add_system_set(
         SystemSet::on_exit(AppState::Playing)

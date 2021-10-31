@@ -8,6 +8,7 @@ pub use self::ball::BallSystem;
 pub use self::scoreboard::Scoreboard;
 pub use self::scoreboard::ScoreboardSystem;
 pub use self::collision::CollisionSystem;
+pub use self::game_over::GameOverSystem;
 
 mod root;
 mod main_menu;
@@ -16,3 +17,4 @@ mod paddle;
 mod ball;
 mod scoreboard;
 mod collision;
+mod game_over;

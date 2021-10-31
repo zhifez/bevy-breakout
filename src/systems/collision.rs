@@ -59,18 +59,6 @@ impl CollisionSystem {
         )
         .insert(Collider::Solid);
 
-        // BOTTOM
-        // commands
-        // .spawn_bundle(
-        //     SpriteBundle {
-        //         material: wall_material.clone(),
-        //         transform: Transform::from_xyz(0.0, -WINDOW_HEIGHT / 2.0 + WALL_SIZE / 2.0, 0.0),
-        //         sprite: Sprite::new(Vec2::new(WINDOW_WIDTH, WALL_SIZE)),
-        //         ..Default::default()
-        //     }
-        // )
-        // .insert(Collider::Solid);
-
         // ADD BRICKS
         for (index, gl_data) in game_levels.iter().enumerate() {
             if index == game_state.selected_level as usize {
@@ -118,16 +106,28 @@ impl CollisionSystem {
     }
 
     pub fn run(
-        mut commands: Commands,
         mut scoreboard: ResMut<Scoreboard>,
         mut ball_query: Query<(&mut Ball, &Transform, &Sprite)>,
-        collider_query: Query<(Entity, &Collider, &Transform, &Sprite)>,
+        mut collider_query: Query<(&mut Visible, &Collider, &Transform, &Sprite)>,
+        keyboard_input: Res<Input<KeyCode>>,
     ) {
         if let Ok((mut ball, ball_transform, sprite)) = ball_query.single_mut() {
             let ball_size = sprite.size;
             let velocity = &mut ball.velocity;
 
-            for (collider_entity, collider, transform, sprite) in collider_query.iter() {
+            if keyboard_input.just_pressed(KeyCode::R) {
+                for (mut visible, collider, _transform, _sprite) in collider_query.iter_mut() {
+                    if let Collider::Scorable = *collider {
+                        visible.is_visible = true;
+                    }
+                }
+            }
+
+            for (mut visible, collider, transform, sprite) in collider_query.iter_mut() {
+                if !visible.is_visible {
+                    continue;
+                }
+                
                 let collision = collide(
                     ball_transform.translation,
                     ball_size,
@@ -139,7 +139,7 @@ impl CollisionSystem {
                 if let Some(collision) = collision {
                     if let Collider::Scorable = *collider {
                         scoreboard.score += 1;
-                        commands.entity(collider_entity).despawn();
+                        visible.is_visible = false;
                     }
 
                     let mut reflect_x = false;
