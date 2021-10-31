@@ -201,6 +201,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy-breakout"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy_asset_ron",
+ "bevy_reflect",
+ "serde",
+]
+
+[[package]]
 name = "bevy-glsl-to-spirv"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3041,16 +3051,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-xid",
-]
-
-[[package]]
-name = "test-bevy"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "bevy_asset_ron",
- "bevy_reflect",
- "serde",
 ]
 
 [[package]]
