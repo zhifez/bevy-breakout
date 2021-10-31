@@ -36,6 +36,26 @@ impl MainMenuSystem {
                     text: Text {
                         sections: vec![
                             TextSection {
+                                value: "A clone of".to_string(),
+                                style: TextStyle {
+                                    font: asset_server.load("fonts/square.ttf"),
+                                    font_size: 20.0,
+                                    color: Color::hex("F5F5F5").unwrap(),
+                                },
+                            },
+                        ],
+                        ..Default::default()
+                    },
+                    ..Default::default()
+                }
+            );
+
+            parent
+            .spawn_bundle(
+                TextBundle {
+                    text: Text {
+                        sections: vec![
+                            TextSection {
                                 value: "Breakout".to_string(),
                                 style: TextStyle {
                                     font: asset_server.load("fonts/square.ttf"),
@@ -56,7 +76,7 @@ impl MainMenuSystem {
                     text: Text {
                         sections: vec![
                             TextSection {
-                                value: "Made with Bevy".to_string(),
+                                value: "Made using Bevy".to_string(),
                                 style: TextStyle {
                                     font: asset_server.load("fonts/square.ttf"),
                                     font_size: 20.0,
@@ -91,7 +111,7 @@ impl MainMenuSystem {
                     text: Text {
                         sections: vec![
                             TextSection {
-                                value: "Press SPACE to play the game".to_string(),
+                                value: "Press space to begin".to_string(),
                                 style: TextStyle {
                                     font: asset_server.load("fonts/square.ttf"),
                                     font_size: 20.0,

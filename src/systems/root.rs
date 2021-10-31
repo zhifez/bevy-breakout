@@ -10,18 +10,30 @@ impl RootSystem {
         mut app_exit_events: EventWriter<AppExit>,
         mut game_state: ResMut<State<AppState>>,
     ) {
-        if keyboard_input.pressed(KeyCode::Escape) {
-            app_exit_events.send(AppExit);
+        if keyboard_input.just_pressed(KeyCode::Escape) {
+            match game_state.current() {
+                AppState::MainMenu => {
+                    app_exit_events.send(AppExit);
+                },
+                AppState::LevelSelect => {
+                    game_state.set(AppState::MainMenu).unwrap();
+                },
+                AppState::Playing => {
+                    game_state.set(AppState::LevelSelect).unwrap();
+                },
+            }
             return;
         }
-
-        match game_state.current() {
-            AppState::MainMenu => {
-                if keyboard_input.pressed(KeyCode::Space) {
+        else if keyboard_input.just_pressed(KeyCode::Space) {
+            match game_state.current() {
+                AppState::MainMenu => {
+                    game_state.set(AppState::LevelSelect).unwrap();
+                },
+                AppState::LevelSelect => {
                     game_state.set(AppState::Playing).unwrap();
-                }
-            },
-            _ => {}
+                },
+                _ => {}
+            }
         }
     }
 }

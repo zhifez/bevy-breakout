@@ -6,5 +6,6 @@ https://github.com/bevyengine/bevy/blob/latest/examples/game/breakout.rs
 ## Roadmap
 
 - [X] Main menu
-- [ ] Level selection
-- [ ] Load level based on .ron files
+- [X] Level selection
+- [X] Load level based on .ron files
+- [ ] Show game over screen on level complete

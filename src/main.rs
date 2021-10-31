@@ -2,7 +2,7 @@ mod systems;
 
 use bevy::{DefaultPlugins, prelude::*, render::camera::Camera};
 
-use systems::{BallSystem, CollisionSystem, MainMenuSystem, PaddleSystem, RootSystem, Scoreboard, ScoreboardSystem};
+use systems::{BallSystem, CollisionSystem, LevelSelectSystem, MainMenuSystem, PaddleSystem, RootSystem, Scoreboard, ScoreboardSystem};
 
 use bevy_reflect::TypeUuid;
 
@@ -12,7 +12,7 @@ pub const WINDOW_WIDTH: f32 = 800.0;
 pub const WINDOW_HEIGHT: f32 = 600.0;
 
 pub struct GameState {
-    pub selected_level: isize,
+    pub selected_level: usize,
 }
 
 #[derive(serde::Deserialize, TypeUuid)]
@@ -64,14 +64,14 @@ fn main() {
         ..Default::default()
     })
     .insert_resource(ClearColor(Color::hex("F5F5F5").unwrap()))
-    .insert_resource(GameState { selected_level: -1 })
+    .insert_resource(GameState { selected_level: 0 })
     .insert_resource(Scoreboard { score: 0 })
     .add_plugins(DefaultPlugins)
     .add_plugin(RonAssetPlugin::<GameLevelAsset>::new(&["level"]))
     .add_state(AppState::MainMenu)
     .add_startup_system(setup.system())
     .add_system(RootSystem::run.system())
-    // Menu state
+    // MainMenu state
     .add_system_set(
         SystemSet::on_enter(AppState::MainMenu)
         .with_system(MainMenuSystem::setup.system())
@@ -82,6 +82,19 @@ fn main() {
     )
     .add_system_set(
         SystemSet::on_exit(AppState::MainMenu)
+        .with_system(teardown.system())
+    )
+    // LevelSelect state
+    .add_system_set(
+        SystemSet::on_enter(AppState::LevelSelect)
+        .with_system(LevelSelectSystem::setup.system())
+    )
+    .add_system_set(
+        SystemSet::on_update(AppState::LevelSelect)
+        .with_system(LevelSelectSystem::run.system())
+    )
+    .add_system_set(
+        SystemSet::on_exit(AppState::LevelSelect)
         .with_system(teardown.system())
     )
     // Playing state
