@@ -8,7 +8,7 @@ pub const WALL_SIZE: f32 = 10.0;
 pub const WALL_SIZE_TOP: f32 = 50.0;
 pub const BRICK_SPACING: f32 = 20.0;
 pub const BRICK_WIDTH: f32 = 80.0;
-pub const BRICK_HEIGHT: f32 = 30.0;
+pub const BRICK_HEIGHT: f32 = 20.0;
 
 pub struct CollisionSystem;
 
@@ -16,6 +16,7 @@ impl CollisionSystem {
     pub fn setup(
         mut commands: Commands,
         mut materials: ResMut<Assets<ColorMaterial>>,
+        mut scoreboard: ResMut<Scoreboard>,
         game_state: Res<GameState>,
         game_level_assets: Res<Assets<GameLevelAsset>>,
         game_levels: Query<&GameLevel>,
@@ -60,6 +61,7 @@ impl CollisionSystem {
         .insert(Collider::Solid);
 
         // ADD BRICKS
+        scoreboard.maxScores = 0;
         for (index, gl_data) in game_levels.iter().enumerate() {
             if index == game_state.selected_level as usize {
                 if let Some(gl) = game_level_assets.get(&gl_data.handle) {
@@ -70,7 +72,7 @@ impl CollisionSystem {
                     let bricks_width = columns as f32 * (BRICK_WIDTH + BRICK_SPACING) - BRICK_SPACING;
                     let bricks_offset = Vec3::new(
                         -(bricks_width / 2.0 - BRICK_WIDTH / 2.0), 
-                        WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE_TOP - WALL_SIZE, 
+                        WINDOW_HEIGHT / 2.0 - BRICK_HEIGHT / 2.0 - WALL_SIZE_TOP - WALL_SIZE * 2.0, 
                         0.0
                     );
                     let brick_material = materials.add(Color::hex("087E8B").unwrap().into());
@@ -81,6 +83,8 @@ impl CollisionSystem {
                             if bricks[row][column] == 0 {
                                 continue;
                             }
+
+                            scoreboard.maxScores += 1;
 
                             let brick_position = Vec3::new(
                                 column as f32 * (BRICK_WIDTH + BRICK_SPACING),

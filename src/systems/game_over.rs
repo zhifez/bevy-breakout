@@ -3,7 +3,10 @@ use bevy::prelude::*;
 use super::{Scoreboard};
 
 pub struct GameOverSystem;
-pub struct GameOverUi;
+pub enum GameOverUi {
+    Static,
+    Title,
+}
 
 impl GameOverSystem {
     pub fn setup(
@@ -28,7 +31,6 @@ impl GameOverSystem {
                 ..Default::default()
             }
         )
-        .insert(GameOverUi)
         .with_children(|parent| {
             parent
             .spawn_bundle(
@@ -45,7 +47,7 @@ impl GameOverSystem {
                     ..Default::default()
                 }
             )
-            .insert(GameOverUi)
+            .insert(GameOverUi::Static)
             .with_children(|parent| {
                 parent
                 .spawn_bundle(
@@ -66,7 +68,7 @@ impl GameOverSystem {
                         ..Default::default()
                     }
                 )
-                .insert(GameOverUi);
+                .insert(GameOverUi::Title);
 
                 parent
                 .spawn_bundle(
@@ -102,7 +104,7 @@ impl GameOverSystem {
                         ..Default::default()
                     }
                 )
-                .insert(GameOverUi);
+                .insert(GameOverUi::Static);
 
                 parent
                 .spawn_bundle(
@@ -123,17 +125,28 @@ impl GameOverSystem {
                         ..Default::default()
                     }
                 )
-                .insert(GameOverUi);
+                .insert(GameOverUi::Static);
             });
         });
     }
 
     pub fn run(
         scoreboard: Res<Scoreboard>,
-        mut query: Query<(&GameOverUi, &mut Visible)>,
+        mut query: Query<(&GameOverUi, &mut Visible, Option<&mut Text>)>,
     ) {
-        for (_game_over_ui, mut visible) in query.iter_mut() {
-            visible.is_visible = scoreboard.lives <= 0;
+        for (game_over_ui, mut visible, text) in query.iter_mut() {
+            visible.is_visible = scoreboard.lives <= 0 || scoreboard.score >= scoreboard.maxScores;
+
+            if let Some(mut t) = text {
+                if let GameOverUi::Title = game_over_ui {
+                    if scoreboard.score >= scoreboard.maxScores {
+                        t.sections[0].value = "Level Complete".to_string();
+                    }
+                    if scoreboard.lives <= 0 {
+                        t.sections[0].value = "Game Over".to_string();
+                    }
+                }
+            }
         }
     }
 }

@@ -42,7 +42,9 @@ impl BallSystem {
 
         if let Ok((mut ball, mut transform)) = ball_query.single_mut() {
             if scoreboard.lives > 0 {
-                transform.translation += ball.velocity * delta_seconds;
+                if scoreboard.score < scoreboard.maxScores {
+                    transform.translation += ball.velocity * delta_seconds;
+                }
 
                 if transform.translation.y.abs() >= WINDOW_HEIGHT / 2.0 {
                     scoreboard.lives -= 1;

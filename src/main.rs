@@ -68,6 +68,7 @@ fn main() {
     .insert_resource(
         Scoreboard { 
             score: 0,
+            maxScores: 0,
             lives: 3,
         }
     )

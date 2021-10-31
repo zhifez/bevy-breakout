@@ -4,6 +4,7 @@ use crate::systems::collision::WALL_SIZE;
 
 pub struct Scoreboard {
     pub score: usize,
+    pub maxScores: usize,
     pub lives: usize,
 }
 pub struct ScoreboardLabel(String);
