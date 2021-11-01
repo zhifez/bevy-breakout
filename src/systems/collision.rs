@@ -61,7 +61,7 @@ impl CollisionSystem {
         .insert(Collider::Solid);
 
         // ADD BRICKS
-        scoreboard.maxScores = 0;
+        scoreboard.max_scores = 0;
         for (index, gl_data) in game_levels.iter().enumerate() {
             if index == game_state.selected_level as usize {
                 if let Some(gl) = game_level_assets.get(&gl_data.handle) {
@@ -84,7 +84,7 @@ impl CollisionSystem {
                                 continue;
                             }
 
-                            scoreboard.maxScores += 1;
+                            scoreboard.max_scores += 1;
 
                             let brick_position = Vec3::new(
                                 column as f32 * (BRICK_WIDTH + BRICK_SPACING),

@@ -135,11 +135,11 @@ impl GameOverSystem {
         mut query: Query<(&GameOverUi, &mut Visible, Option<&mut Text>)>,
     ) {
         for (game_over_ui, mut visible, text) in query.iter_mut() {
-            visible.is_visible = scoreboard.lives <= 0 || scoreboard.score >= scoreboard.maxScores;
+            visible.is_visible = scoreboard.lives <= 0 || scoreboard.score >= scoreboard.max_scores;
 
             if let Some(mut t) = text {
                 if let GameOverUi::Title = game_over_ui {
-                    if scoreboard.score >= scoreboard.maxScores {
+                    if scoreboard.score >= scoreboard.max_scores {
                         t.sections[0].value = "Level Complete".to_string();
                     }
                     if scoreboard.lives <= 0 {
